@@ -207,6 +207,10 @@
             padding-top: 2rem;
         }
 
+        .hero__mobile-img {
+            display: none;
+        }
+
         .hero__content {
             max-width: 660px;
             display: flex;
@@ -357,14 +361,44 @@
         @media (max-width: 1024px) {
             .hero {
                 min-height: auto;
-                padding: 5rem 0 4rem;
-                background-image:
-                    linear-gradient(to bottom, rgba(9, 9, 11, 0.92) 0%, var(--bg-canvas) 100%),
-                    url('img/cta-3-1.webp');
+                padding: 0;
+                background-image: none;
+                background-color: var(--bg-canvas);
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .hero__mobile-img {
+                display: block;
+                position: relative;
+                width: 100%;
+                aspect-ratio: 4/3;
+                overflow: hidden;
+            }
+
+            .hero__mobile-img img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                object-position: center top;
+            }
+
+            .hero__mobile-img::after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                height: 50%;
+                background: linear-gradient(to bottom, transparent, var(--bg-canvas));
+                pointer-events: none;
             }
 
             .hero__content {
                 max-width: 100%;
+                padding: 2rem 0 3rem;
+                text-align: center;
+                align-items: center;
             }
 
             .cred-grid {
@@ -439,6 +473,9 @@
      1. HERO — Limpo, 3 segundos, sem parede de texto
      ═══════════════════════════════════════════════ -->
     <section class="hero">
+        <div class="hero__mobile-img">
+            <img src="img/cta-3-1.webp" alt="Jezreel Soares">
+        </div>
         <div class="container">
             <div class="hero__content">
                 <div class="reveal"
