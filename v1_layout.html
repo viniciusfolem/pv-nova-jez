@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Closer 360 — Imersão com Jezreel Soares</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.cdnfonts.com">
+    <link href="https://fonts.cdnfonts.com/css/clash-display" rel="stylesheet">
+    <link href="https://fonts.cdnfonts.com/css/clash-grotesk" rel="stylesheet">
+
+    <style>
+        :root {
+            /* Colors - Refined Zinc/Slate palette */
+            --bg-canvas: #09090b;
+            /* Zinc-950 equivalent */
+            --bg-surface: #18181b;
+            /* Zinc-900 */
+            --color-text-primary: #f8fafc;
+            --color-text-secondary: #94a3b8;
+            --color-accent: #00c871;
+            /* Brand green */
+            --color-accent-soft: rgba(0, 200, 113, 0.1);
+            --color-gold: #eed7a4;
+
+            /* Spacing */
+            --section-padding: clamp(6rem, 12vw, 10rem);
+            --card-padding: 2rem;
+
+            /* Motion */
+            --ease-fluid: cubic-bezier(0.32, 0.72, 0, 1);
+            --duration-slow: 800ms;
+        }
+
+        /* Reset & Base */
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            background-color: var(--bg-canvas);
+            color: var(--color-text-primary);
+            font-family: 'Clash Grotesk', sans-serif;
+            overflow-x: hidden;
+        }
+
+        body {
+            line-height: 1.6;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Typography */
+        .h1,
+        .h2,
+        .h3 {
+            font-family: 'Clash Display', sans-serif;
+            font-weight: 500;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+        }
+
+        .h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+        }
+
+        .h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+        }
+
+        .text-secondary {
+            color: var(--color-text-secondary);
+        }
+
+        .text-accent {
+            color: var(--color-accent);
+        }
+
+        .text-gold {
+            color: var(--color-gold);
+        }
+
+        /* Double-Bezel Architecture (Shell + Core) */
+        .bezel-container {
+            padding: 6px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 2.5rem;
+            transition: transform var(--duration-slow) var(--ease-fluid);
+        }
+
+        .bezel-core {
+            background: var(--bg-surface);
+            border-radius: calc(2.5rem - 6px);
+            padding: var(--card-padding);
+            height: 100%;
+            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
+        }
+
+        /* Button Architecture (Button-in-Button) */
+        .btn-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 12px 12px 28px;
+            background: var(--color-accent);
+            color: white;
+            font-family: 'Clash Display', sans-serif;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-decoration: none;
+            border-radius: 9999px;
+            transition: all 400ms var(--ease-fluid);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-pill:hover {
+            transform: scale(1.02);
+            filter: brightness(1.1);
+        }
+
+        .btn-pill:active {
+            transform: scale(0.98);
+        }
+
+        .btn-icon-wrapper {
+            width: 44px;
+            height: 44px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 400ms var(--ease-fluid);
+        }
+
+        .btn-pill:hover .btn-icon-wrapper {
+            transform: translateX(4px);
+        }
+
+        /* Grid System */
+        .container {
+            width: 100%;
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Entry Animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            filter: blur(10px);
+            transition: all var(--duration-slow) var(--ease-fluid);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+            filter: blur(0);
+        }
+
+        /* Sections */
+        .section {
+            padding-top: var(--section-padding);
+            padding-bottom: var(--section-padding);
+        }
+
+        /* ========== HERO (Asymmetric) ========== */
+        .hero {
+            min-height: 100dvh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            background-color: var(--bg-canvas);
+            background-image:
+                linear-gradient(to right, var(--bg-canvas) 0%, rgba(9, 9, 11, 0.6) 30%, transparent 80%),
+                linear-gradient(to bottom, transparent 60%, var(--bg-canvas) 100%),
+                url('img/cta-3-1.webp');
+            background-size: cover;
+            background-position: center top;
+            background-repeat: no-repeat;
+            padding-top: 4rem;
+        }
+
+        .hero-split {
+            display: block;
+            width: 100%;
+            max-width: 650px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-content {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            z-index: 2;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            width: fit-content;
+            padding: 6px 16px;
+            background: var(--color-accent-soft);
+            border: 1px solid var(--color-accent);
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--color-accent);
+            backdrop-filter: blur(10px);
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 1024px) {
+            .hero-split {
+                max-width: 100%;
+                text-align: left;
+            }
+
+            .hero-badge {
+                margin: 0;
+            }
+
+            .hero {
+                min-height: auto;
+                padding-top: 5rem;
+                padding-bottom: 6rem;
+                background-image:
+                    linear-gradient(to right, var(--bg-canvas) 0%, rgba(9, 9, 11, 0.8) 50%, transparent 100%),
+                    linear-gradient(to bottom, transparent 40%, var(--bg-canvas) 100%),
+                    url('img/cta-3-1.webp');
+            }
+
+            #floating-nav {
+                display: none !important;
+            }
+        }
+
+        /* Custom UI Elements */
+        .pill-tag {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 8px 16px;
+            border-radius: 9999px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* ========== MOBILE OPTIMIZATION ========== */
+        @media (max-width: 768px) {
+            :root {
+                --section-padding: clamp(3.5rem, 8vw, 5rem);
+                --card-padding: 1.25rem;
+            }
+
+            .container {
+                padding: 0 1.25rem;
+            }
+
+            /* Typography mobile scaling */
+            .h1 {
+                font-size: clamp(1.85rem, 7vw, 2.5rem);
+            }
+
+            .h2 {
+                font-size: clamp(1.6rem, 5.5vw, 2rem);
+            }
+
+            /* Hero mobile */
+            .hero {
+                min-height: auto;
+                padding: 5rem 0 4rem;
+                background-image:
+                    linear-gradient(to bottom, rgba(9, 9, 11, 0.75) 0%, var(--bg-canvas) 100%),
+                    url('img/cta-3-1.webp');
+                background-position: center top;
+            }
+
+            .hero-split {
+                max-width: 100%;
+            }
+
+            .hero-content {
+                gap: 1.5rem;
+            }
+
+            .hero .text-secondary {
+                font-size: 1.05rem !important;
+                max-width: 100% !important;
+            }
+
+            /* Button mobile */
+            .btn-pill {
+                width: 100%;
+                justify-content: center;
+                font-size: 1rem;
+                padding: 14px 14px 14px 24px;
+            }
+
+            .btn-icon-wrapper {
+                width: 38px;
+                height: 38px;
+            }
+
+            /* Section 2 - Quote: stack columns */
+            #quote .container {
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 3rem !important;
+            }
+
+            #quote .h2 {
+                font-size: 2.2rem !important;
+            }
+
+            #quote .bezel-container {
+                transform: rotate(0deg) !important;
+            }
+
+            #quote .bezel-container[style*="position: absolute"] {
+                position: relative !important;
+                right: auto !important;
+                bottom: auto !important;
+                width: 70% !important;
+                margin: -2rem auto 0;
+            }
+
+            /* Section 3 - O que você vai receber: stack */
+            #mudou .container > div[style*="grid-template-columns"] {
+                display: flex !important;
+                flex-direction: column-reverse !important;
+                gap: 2.5rem !important;
+            }
+
+            #mudou .container > div:first-child {
+                margin-bottom: 3rem !important;
+            }
+
+            #mudou .h1 {
+                font-size: clamp(1.75rem, 6.5vw, 2.2rem);
+            }
+
+            #mudou .text-secondary {
+                font-size: 1rem !important;
+            }
+
+            #mudou .bezel-container {
+                border-radius: 1.5rem !important;
+            }
+
+            /* Section 4 - Pra quem é: bento grid mobile */
+            #praquem .container > div:first-child {
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                gap: 1.5rem !important;
+                margin-bottom: 2.5rem !important;
+            }
+
+            #praquem .container > div:first-child img {
+                display: none;
+            }
+
+            #praquem div[style*="grid-template-columns: repeat(12"] {
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 1rem !important;
+            }
+
+            #praquem .bezel-container {
+                grid-column: span 1 !important;
+            }
+
+            #praquem .bezel-core p {
+                font-size: 1.15rem !important;
+            }
+
+            #praquem .bezel-core div[style*="display: flex; align-items: center; gap: 2rem"] {
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                gap: 1rem !important;
+            }
+
+            /* Section 5 - Agenda: stack */
+            #agenda .container {
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 2.5rem !important;
+            }
+
+            #agenda .hero-content {
+                position: relative !important;
+                top: auto !important;
+            }
+
+            #agenda .bezel-container {
+                position: relative !important;
+                top: auto !important;
+            }
+
+            #agenda .bezel-core {
+                flex-direction: column !important;
+                gap: 0.75rem !important;
+                padding: 1.25rem !important;
+            }
+
+            #agenda .bezel-core .h2 {
+                font-size: 1.2rem !important;
+                text-align: left;
+            }
+
+            #agenda .bezel-core p[style*="font-size: 1.2rem"] {
+                font-size: 1.05rem !important;
+            }
+
+            /* Section 7 - Ingressos */
+            #ingressos .container > div:first-child {
+                margin-bottom: 3rem !important;
+            }
+
+            #ingressos .bezel-core {
+                padding: 2rem 1.5rem !important;
+            }
+
+            #ingressos .h1 {
+                font-size: 3.5rem !important;
+            }
+
+            #ingressos div[style*="grid-template-columns: 1fr 1fr"] {
+                grid-template-columns: 1fr !important;
+                gap: 1rem !important;
+            }
+
+            /* Section 8 - Mentor: stack */
+            #mentor .container {
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 3rem !important;
+            }
+
+            #mentor .bezel-container {
+                transform: rotate(0deg) !important;
+            }
+
+            #mentor .bezel-container[style*="position: absolute"] {
+                display: none;
+            }
+
+            /* Section 9 - FAQ: stack */
+            #faq .container {
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 2.5rem !important;
+            }
+
+            #faq .bezel-core {
+                padding: 1.25rem 1.5rem !important;
+            }
+
+            #faq summary {
+                font-size: 1rem !important;
+            }
+
+            /* Footer mobile */
+            footer .container > div:first-child {
+                flex-direction: column !important;
+                gap: 2.5rem !important;
+            }
+
+            footer div[style*="display: flex; gap: 4rem"] {
+                gap: 2rem !important;
+            }
+
+            footer div[style*="margin-top: 6rem"] {
+                flex-direction: column !important;
+                gap: 0.5rem !important;
+                margin-top: 3rem !important;
+                padding-top: 1.5rem !important;
+            }
+
+            /* Bezel containers: softer radius on mobile */
+            .bezel-container {
+                border-radius: 1.5rem;
+            }
+
+            .bezel-core {
+                border-radius: calc(1.5rem - 6px);
+            }
+
+            /* Smooth scroll targets offset for mobile */
+            section[id] {
+                scroll-margin-top: 1rem;
+            }
+        }
+
+        /* Small phones */
+        @media (max-width: 390px) {
+            .container {
+                padding: 0 1rem;
+            }
+
+            .h1 {
+                font-size: 1.65rem;
+            }
+
+            .btn-pill {
+                font-size: 0.9rem;
+                padding: 12px 12px 12px 20px;
+            }
+
+            #ingressos .h1 {
+                font-size: 2.8rem !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header / Nav (Floating Pill) -->
+    <nav id="floating-nav" style="position: fixed; top: 1.5rem; left: 50%; transform: translateX(-50%); z-index: 100;">
+        <div class="pill-tag"
+            style="padding: 8px 18px; display: flex; align-items: center; gap: 24px; border: 1px solid rgba(255,255,255,0.15); background: rgba(9, 9, 11, 0.8);">
+            <img src="img/logo-branca-Funi.svg" alt="FUNI$$" style="height: 18px;">
+            <div style="display: flex; gap: 20px;">
+                <a href="#quote"
+                    style="color: white; text-decoration: none; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">A
+                    Imersão</a>
+                <a href="#praquem"
+                    style="color: white; text-decoration: none; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Pra
+                    quem é</a>
+                <a href="#ingressos"
+                    style="color: white; text-decoration: none; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Vagas</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ========== HERO (Asymmetric) ========== -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-split">
+                <div class="hero-content">
+                    <div class="hero-badge reveal">Vagas Limitadas</div>
+                    <h1 class="h1 reveal">Quanto tempo mais você vai trocar seu dia por <span class="text-gold">um
+                            salário que não muda?</span></h1>
+                    <p class="text-secondary reveal" style="font-size: 1.25rem; max-width: 550px;">
+                        Dia 18/04, ao vivo no Zoom, você vai conhecer a profissão que está tirando pessoas comuns do CLT
+                        e colocando <span style="color: white; font-weight: 600;">R$10.000/mês</span> no bolso delas. Em
+                        5 horas. Por R$27.
+                    </p>
+                    <div class="reveal">
+                        <a href="#ingressos" class="btn-pill">
+                            GARANTIR MINHA VAGA — R$27
+                            <div class="btn-icon-wrapper">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </div>
+                        </a>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 12px; margin-top: 1rem;" class="reveal">
+                        <div
+                            style="display: flex; -webkit-mask-image: linear-gradient(to right, black 80%, transparent); mask-image: linear-gradient(to right, black 80%, transparent);">
+                            <img src="img/image-24.webp"
+                                style="width: 32px; height: 32px; border-radius: 50%; border: 2px solid var(--bg-canvas);">
+                            <img src="img/image-23.webp"
+                                style="width: 32px; height: 32px; border-radius: 50%; border: 2px solid var(--bg-canvas); margin-left: -12px;">
+                        </div>
+                        <p style="font-size: 0.85rem; color: var(--color-text-secondary);">+1.500 alunos transformados
+                            pelo método</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== SECTION 2 - Quote (Editorial Split) ========== -->
+    <section id="quote" class="section">
+        <div class="container"
+            style="display: grid; grid-template-columns: 1fr 1fr; gap: 8rem; align-items: flex-start;">
+            <div class="hero-content">
+                <span class="pill-tag reveal"
+                    style="width: fit-content; text-transform: uppercase; font-size: 0.7rem; color: var(--color-gold); border-color: var(--color-gold);">Reflexão</span>
+                <h2 class="h2 reveal" style="font-size: 4rem;">&ldquo;Você já fez a conta.&rdquo;</h2>
+                <div class="reveal" style="display: flex; align-items: center; gap: 16px;">
+                    <div style="width: 4px; height: 60px; background: var(--color-gold);"></div>
+                    <p style="font-size: 1.5rem; font-weight: 500; line-height: 1.2;">
+                        Salário fixo. Vale transporte.<br>
+                        <span class="text-secondary">O que sobra mal cobre o mês.</span>
+                    </p>
+                </div>
+                <div class="reveal" style="display: flex; flex-direction: column; gap: 1.5rem;">
+                    <p class="text-secondary" style="font-size: 1.1rem;">Não é falta de esforço. Você trabalha, cumpre,
+                        entrega. O problema é o modelo. Trocar tempo por salário tem um teto, e você já bateu nele.</p>
+                    <p style="font-size: 1.25rem; font-weight: 600;">Enquanto isso, tem gente que nunca trabalhou com
+                        vendas na vida faturando <span class="text-accent">R$10.000 por mês</span> de casa.</p>
+                    <p class="text-secondary" style="font-size: 1.1rem;">Eles aprenderam uma profissão que você ainda
+                        não conhece. E no dia 18 de abril, o Jezreel Soares vai te mostrar exatamente como ela funciona.
+                    </p>
+                </div>
+            </div>
+
+            <div class="reveal" style="position: relative;">
+                <div class="bezel-container" style="transform: rotate(-3deg); border-radius: 2rem;">
+                    <div class="bezel-core" style="padding: 10px; border-radius: calc(2rem - 6px);">
+                        <img src="img/Rectangle-1829-1.webp"
+                            style="border-radius: calc(2rem - 10px); filter: brightness(0.8);">
+                    </div>
+                </div>
+                <div class="bezel-container"
+                    style="transform: rotate(4deg); position: absolute; bottom: -80px; right: -40px; width: 80%; z-index: 2;">
+                    <div class="bezel-core" style="padding: 10px; border-radius: calc(2rem - 6px);">
+                        <img src="img/Rectangle-1830-1.webp" style="border-radius: calc(2rem - 10px);">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== SECTION 3 - Mudou (Asymmetric Grid) ========== -->
+    <section id="mudou" class="section" style="background: linear-gradient(to bottom, var(--bg-canvas), #050505);">
+        <div class="container">
+            <div style="text-align: center; margin-bottom: 6rem;">
+                <h2 class="h1 reveal">O que você vai <span class="text-gold">receber nesta imersão</span></h2>
+                <p class="text-secondary reveal" style="margin-top: 1rem; font-size: 1.25rem;">Zoom · Ao vivo · 18/04 ·
+                    14h às 19h</p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center;">
+                <div class="reveal">
+                    <div class="bezel-container" style="padding: 12px; border-radius: 3rem;">
+                        <div class="bezel-core" style="padding: 0; overflow: hidden; border-radius: calc(3rem - 12px);">
+                            <img src="img/image-728-1.webp"
+                                style="width: 100%; transition: transform 1s var(--ease-fluid);"
+                                onmouseover="this.style.transform='scale(1.05)'"
+                                onmouseout="this.style.transform='scale(1)'">
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-content">
+                    <div class="reveal" style="display: flex; flex-direction: column; gap: 2rem;">
+                        <div style="display: flex; gap: 20px;">
+                            <div class="btn-icon-wrapper"
+                                style="background: var(--color-accent-soft); color: var(--color-accent); flex-shrink: 0;">
+                                01</div>
+                            <p class="text-secondary"><span style="color: white; font-weight: 600;">O mapa pra sair do
+                                    salário fixo</span> e chegar nos R$10k/mês em 90 dias.</p>
+                        </div>
+                        <div style="display: flex; gap: 20px;">
+                            <div class="btn-icon-wrapper"
+                                style="background: var(--color-accent-soft); color: var(--color-accent); flex-shrink: 0;">
+                                02</div>
+                            <p class="text-secondary"><span style="color: white; font-weight: 600;">O script de
+                                    fechamento</span> que closers usam pra faturar R$15k+ por mês, gerando +R$40
+                                milhões.</p>
+                        </div>
+                        <div style="display: flex; gap: 20px;">
+                            <div class="btn-icon-wrapper"
+                                style="background: var(--color-accent-soft); color: var(--color-accent); flex-shrink: 0;">
+                                03</div>
+                            <p class="text-secondary"><span style="color: white; font-weight: 600;">As 5 objeções
+                                    fatais</span> e o processo para desarmar cada uma na hora.</p>
+                        </div>
+                        <hr style="border: none; border-top: 1px solid rgba(255,255,255,0.1);">
+                        <p class="h3 reveal" style="font-size: 1.8rem; line-height: 1.3;">Em 5 horas, você vai planejar
+                            sua carreira de Closer Digital para ganhar <span class="text-accent underline">R$10.000 por
+                                mês.</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== SECTION 4 - Pra Quem É (The Asymmetrical Bento) ========== -->
+    <section id="praquem" class="section">
+        <div class="container text-center">
+            <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 5rem;">
+                <div style="text-align: left;">
+                    <p class="text-accent"
+                        style="font-size: 0.9rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 1rem;">
+                        Público Alvo</p>
+                    <h2 class="h1 reveal" style="max-width: 600px;">Pra quem é esta oportunidade?</h2>
+                </div>
+                <img src="img/logo-preta-Funi.svg" alt="" style="width: 180px; filter: invert(1); opacity: 0.2;"
+                    class="reveal">
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(12, 1fr); gap: 1.5rem;">
+                <!-- Card 1 -->
+                <div class="bezel-container reveal" style="grid-column: span 7;">
+                    <div class="bezel-core"
+                        style="display: flex; flex-direction: column; gap: 1.5rem; text-align: left;">
+                        <img src="img/01-1.svg" style="width: 48px; filter: hue-rotate(90deg);">
+                        <p style="font-size: 1.5rem; font-weight: 500;"><span class="text-secondary">Abre o app do banco
+                                no dia 5</span> e já sabe que vai apertar até o dia 30.</p>
+                    </div>
+                </div>
+                <!-- Card 2 -->
+                <div class="bezel-container reveal" style="grid-column: span 5;">
+                    <div class="bezel-core"
+                        style="display: flex; flex-direction: column; gap: 1.5rem; text-align: left;">
+                        <img src="img/02-1.svg" style="width: 48px;">
+                        <p style="font-size: 1.5rem; font-weight: 500;"><span class="text-secondary">Pega transporte
+                                lotado</span> pra um trabalho que não paga o que você vale.</p>
+                    </div>
+                </div>
+                <!-- Card 3 -->
+                <div class="bezel-container reveal" style="grid-column: span 4;">
+                    <div class="bezel-core"
+                        style="display: flex; flex-direction: column; gap: 1.5rem; text-align: left;">
+                        <img src="img/03-1.svg" style="width: 48px;">
+                        <p style="font-size: 1.5rem; font-weight: 500;"><span class="text-secondary">Já pesquisou "como
+                                ganhar dinheiro na internet"</span> exaustivamente.</p>
+                    </div>
+                </div>
+                <!-- Card 4 -->
+                <div class="bezel-container reveal" style="grid-column: span 8;">
+                    <div class="bezel-core"
+                        style="display: flex; flex-direction: column; gap: 1.5rem; text-align: left; justify-content: center;">
+                        <div style="display: flex; align-items: center; gap: 2rem;">
+                            <img src="img/04.svg" style="width: 60px;">
+                            <p style="font-size: 1.75rem; font-weight: 600;">Sente que tem capacidade pra muito mais,
+                                mas não sabe por onde começar.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== SECTION 5 - Agenda (Sticky Depth) ========== -->
+    <section id="agenda" class="section" style="background: #050505;">
+        <div class="container" style="display: grid; grid-template-columns: 0.8fr 1.2fr; gap: 8rem;">
+            <div class="hero-content" style="position: sticky; top: 10rem; height: fit-content;">
+                <span class="pill-tag reveal" style="width: fit-content;">AGENDA 18/04</span>
+                <h2 class="h2 reveal">O que você vai <span class="text-gold">aprender e implementar</span></h2>
+                <div class="reveal" style="display: flex; gap: 20px; align-items: center;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)"
+                        stroke-width="2">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                    </svg>
+                    <p class="text-secondary">5 horas intensas de pura prática comercial.</p>
+                </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <div class="bezel-container reveal" style="position: sticky; top: 8rem;">
+                    <div class="bezel-core" style="display: flex; align-items: center; gap: 2rem;">
+                        <span class="h2 text-accent" style="opacity: 0.3;">14h</span>
+                        <div>
+                            <p style="font-weight: 600; font-size: 1.2rem;">Abertura e Introdução</p>
+                            <p class="text-secondary">Introdução à profissão de Closer no digital.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bezel-container reveal" style="position: sticky; top: 10rem;">
+                    <div class="bezel-core" style="display: flex; align-items: center; gap: 2rem;">
+                        <span class="h2 text-accent" style="opacity: 0.3;">14h45</span>
+                        <div>
+                            <p style="font-weight: 600; font-size: 1.2rem;">Planejamento Estratégico</p>
+                            <p class="text-secondary">Definição de metas e carreira nos R$10k.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bezel-container reveal" style="position: sticky; top: 12rem;">
+                    <div class="bezel-core" style="display: flex; align-items: center; gap: 2rem;">
+                        <span class="h2 text-accent" style="opacity: 0.3;">15h30</span>
+                        <div>
+                            <p style="font-weight: 600; font-size: 1.2rem;">Script na Prática</p>
+                            <p class="text-secondary">Condução de conversas e fechamentos.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bezel-container reveal" style="position: sticky; top: 14rem;">
+                    <div class="bezel-core" style="display: flex; align-items: center; gap: 2rem;">
+                        <span class="h2 text-accent" style="opacity: 0.3;">16h15</span>
+                        <div>
+                            <p style="font-weight: 600; font-size: 1.2rem;">Quebra de Objeções</p>
+                            <p class="text-secondary">Como desarmar o cliente com segurança.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bezel-container reveal" style="position: sticky; top: 16rem;">
+                    <div class="bezel-core" style="display: flex; align-items: center; gap: 2rem;">
+                        <span class="h2 text-accent" style="opacity: 0.3;">17h00</span>
+                        <div>
+                            <p style="font-weight: 600; font-size: 1.2rem;">Mercado e Vagas</p>
+                            <p class="text-secondary">Como conseguir sua primeira vaga de Closer.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== SECTION 7 - Investimento & Ingressos ========== -->
+    <section id="ingressos" class="section">
+        <div class="container">
+            <div style="text-align: center; margin-bottom: 6rem;">
+                <span class="hero-badge reveal"
+                    style="margin-bottom: 2rem; border-color: var(--color-gold); color: var(--color-gold); background: rgba(238, 215, 164, 0.1);">Investimento
+                    Único</span>
+                <h2 class="h1 reveal">Garanta sua vaga na <span class="text-accent">Closer 360</span></h2>
+            </div>
+
+            <div style="max-width: 900px; margin: 0 auto; display: grid; grid-template-columns: 1fr; gap: 3rem;">
+                <div class="bezel-container reveal" style="padding: 10px; border-radius: 2rem;">
+                    <div class="bezel-core"
+                        style="padding: 4rem; text-align: center; display: flex; flex-direction: column; gap: 3rem;">
+                        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                            <p class="h1" style="font-size: 5rem;">R$ 27</p>
+                            <p class="text-secondary"
+                                style="font-size: 1.2rem; text-transform: uppercase; letter-spacing: 4px;">À Vista</p>
+                        </div>
+
+                        <div
+                            style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; text-align: left; padding: 2rem 0; border-top: 1px solid rgba(255,255,255,0.1); border-bottom: 1px solid rgba(255,255,255,0.1);">
+                            <div style="display: flex; gap: 12px; align-items: flex-start;">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)"
+                                    stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                                <p>Imersão ao vivo pelo Zoom (18/04)</p>
+                            </div>
+                            <div style="display: flex; gap: 12px; align-items: flex-start;">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)"
+                                    stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                                <p>Script de fechamento alta conversão</p>
+                            </div>
+                            <div style="display: flex; gap: 12px; align-items: flex-start;">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)"
+                                    stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                                <p>Mapa de carreira para os R$10k</p>
+                            </div>
+                            <div style="display: flex; gap: 12px; align-items: flex-start;">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)"
+                                    stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                                <p>Acesso exclusivo pós-evento</p>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; flex-direction: column; gap: 1.5rem; align-items: center;">
+                            <a href="https://chk.eduzz.com/jg3uhx43" class="btn-pill" style="padding: 16px 16px 16px 40px; font-size: 1.25rem;">
+                                QUERO MINHA VAGA AGORA
+                                <div class="btn-icon-wrapper" style="width: 52px; height: 52px;">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                                        <polyline points="12 5 19 12 12 19"></polyline>
+                                    </svg>
+                                </div>
+                            </a>
+                            <p class="text-secondary"
+                                style="font-size: 0.85rem; display: flex; align-items: center; gap: 8px;">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                                    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                                </svg>
+                                Pagamento Seguro & Imediato
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== SECTION 8 - Mentor (Staggered Bio) ========== -->
+    <section id="mentor" class="section">
+        <div class="container" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8rem; align-items: center;">
+            <div class="reveal" style="position: relative;">
+                <div class="bezel-container" style="transform: rotate(-4deg); padding: 10px;">
+                    <div class="bezel-core" style="padding: 0; overflow: hidden;">
+                        <img src="img/ft-jezreel-11.webp" alt="Jezreel Soares" style="width: 100%;">
+                    </div>
+                </div>
+                <div class="bezel-container"
+                    style="transform: rotate(6deg); position: absolute; top: -40px; right: -40px; width: 60%; padding: 8px; z-index: -1; opacity: 0.5;">
+                    <div class="bezel-core" style="padding: 0; overflow: hidden;">
+                        <img src="img/ft-jezreel-2-1.webp" style="width: 100%;">
+                    </div>
+                </div>
+            </div>
+            <div class="hero-content">
+                <span class="pill-tag reveal"
+                    style="width: fit-content; border-color: var(--color-gold); color: var(--color-gold);">O
+                    MENTOR</span>
+                <h2 class="h1 reveal">Muito prazer, <br>eu sou o <span class="text-gold">Jezreel Soares</span></h2>
+                <div class="reveal" style="display: flex; flex-direction: column; gap: 1.5rem;">
+                    <p class="text-secondary">Treinou mais de 1.500 vendedores. Mais de 42 milhões em vendas 1 a 1.
+                        Destaque na Wiser Educação vendendo e liderando equipes.</p>
+                    <p class="text-secondary">Ex Head Comercial de Érico Rocha. Ex Head Comercial da Reg Life.
+                        Co-produtor comercial de empresas multimilionárias do mercado digital. Criador do Método Chave
+                        Mestra.</p>
+                </div>
+                <div class="reveal" style="margin-top: 1rem;">
+                    <a href="#ingressos" class="btn-pill"
+                        style="background: transparent; border: 1px solid var(--color-gold); color: var(--color-gold);">
+                        CONHECER MINHA HISTÓRIA
+                        <div class="btn-icon-wrapper"
+                            style="background: rgba(238, 215, 164, 0.1); color: var(--color-gold);">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                <polyline points="12 5 19 12 12 19"></polyline>
+                            </svg>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== SECTION 9 - FAQ ========== -->
+    <section id="faq" class="section" style="background: #050505;">
+        <div class="container" style="display: grid; grid-template-columns: 0.8fr 1.2fr; gap: 6rem;">
+            <div>
+                <span class="pill-tag reveal" style="width: fit-content;">DÚVIDAS</span>
+                <h2 class="h2 reveal">Perguntas <br><span class="text-secondary">Frequentes</span></h2>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <!-- FAQ Item 1 -->
+                <div class="bezel-container reveal">
+                    <div class="bezel-core" style="padding: 1.5rem 2rem;">
+                        <details style="cursor: pointer;">
+                            <summary
+                                style="display: flex; justify-content: space-between; align-items: center; font-weight: 600; font-size: 1.1rem; list-style: none;">
+                                Preciso ter experiência em vendas?
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </summary>
+                            <p class="text-secondary" style="margin-top: 1rem;">Não. A imersão foi pensada pra quem está
+                                começando do zero e também pra quem já vende mas quer mais direção.</p>
+                        </details>
+                    </div>
+                </div>
+                <!-- FAQ Item 2 -->
+                <div class="bezel-container reveal">
+                    <div class="bezel-core" style="padding: 1.5rem 2rem;">
+                        <details style="cursor: pointer;">
+                            <summary
+                                style="display: flex; justify-content: space-between; align-items: center; font-weight: 600; font-size: 1.1rem; list-style: none;">
+                                E se eu não puder assistir ao vivo?
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </summary>
+                            <p class="text-secondary" style="margin-top: 1rem;">A imersão é ao vivo e foi pensada para
+                                participação em tempo real. Garanta sua presença no dia 18/04.</p>
+                        </details>
+                    </div>
+                </div>
+                <!-- FAQ Item 3 -->
+                <div class="bezel-container reveal">
+                    <div class="bezel-core" style="padding: 1.5rem 2rem;">
+                        <details style="cursor: pointer;">
+                            <summary
+                                style="display: flex; justify-content: space-between; align-items: center; font-weight: 600; font-size: 1.1rem; list-style: none;">
+                                R$27 é o preço real?
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </summary>
+                            <p class="text-secondary" style="margin-top: 1rem;">Sim. Sem taxa escondida, sem upsell
+                                obrigatório. Você paga R$27 e participa da imersão completa.</p>
+                        </details>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== FOOTER ========== -->
+    <footer style="padding: 6rem 0; border-top: 1px solid rgba(255,255,255,0.05);">
+        <div class="container">
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4rem;">
+                <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                    <img src="img/logo-branca-Funi.svg" alt="FUNI$$" style="height: 32px;">
+                    <p class="text-secondary" style="max-width: 300px; font-size: 0.9rem;">Transformando pessoas reais
+                        em Closers Digitais de alta performance.</p>
+                </div>
+
+                <div style="display: flex; gap: 4rem;">
+                    <div style="display: flex; flex-direction: column; gap: 1rem;">
+                        <p
+                            style="font-weight: 600; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 2px;">
+                            Legal</p>
+                        <a href="#" class="text-secondary" style="text-decoration: none; font-size: 0.9rem;">Termos de
+                            Uso</a>
+                        <a href="#" class="text-secondary"
+                            style="text-decoration: none; font-size: 0.9rem;">Privacidade</a>
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 1rem;">
+                        <p
+                            style="font-weight: 600; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 2px;">
+                            Suporte</p>
+                        <a href="#" class="text-secondary"
+                            style="text-decoration: none; font-size: 0.9rem;">WhatsApp</a>
+                        <a href="#" class="text-secondary" style="text-decoration: none; font-size: 0.9rem;">E-mail</a>
+                    </div>
+                </div>
+            </div>
+
+            <div
+                style="margin-top: 6rem; padding-top: 3rem; border-top: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; font-size: 0.8rem; color: #444;">
+                <p>&copy; 2026 Jezreel Soares. Todos os direitos reservados.</p>
+
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scroll Intersection Script (at bottom) -->
+    <script>
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
+</body>
+
+</html>
